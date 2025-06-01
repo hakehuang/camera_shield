@@ -25,21 +25,28 @@ class BlackScreenDetector(DetectionPlugin):
         
         # 直方图分析（黑屏像素占比）
         hist = cv2.calcHist([gray], [0], None, [256], [0,256])
-        black_ratio = np.sum(hist[:10])/gray.size
+        black_ratio = np.sum(hist[:20])/gray.size
+        
+        # 预处理：高斯模糊和阈值处理
+        blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+        _, thresholded = cv2.threshold(blurred, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         
         # 边缘检测（Canny边缘数量）
-        edges = cv2.Canny(gray, 100, 200)
+        edges = cv2.Canny(thresholded, 100, 200)
         edge_pixels = np.count_nonzero(edges)
         
         # 亮度均值检测
         mean_brightness = np.mean(gray)
         
         # 在帧上显示检测结果
-        is_black = (
-            (variance < self.threshold['variance']) |
-            (black_ratio > self.threshold['histogram']) |
-            (mean_brightness < self.threshold['brightness'])
-        ) & (edge_pixels < self.threshold['edges'])
+        # 投票机制：至少满足3个条件才判定为黑屏
+        vote_count = (
+            int(variance < self.threshold['variance']) +
+            int(black_ratio > self.threshold['histogram']) +
+            int(mean_brightness < self.threshold['brightness']) +
+            int(edge_pixels < self.threshold['edges'])
+        )
+        is_black = vote_count >= 2
         
         # 显示检测状态
         status_text = "Black Screen Detected" if is_black else "Normal"
