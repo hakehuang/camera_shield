@@ -26,6 +26,7 @@ class Application:
 
     def run(self):
         try:
+            self.camera.initialize()
             while True:
                 ret, frame = self.camera.get_frame()
                 if not ret:
