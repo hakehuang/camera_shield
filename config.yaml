@@ -1,0 +1,26 @@
+black_screen_detector:
+  variance_threshold: 50    # 方差阈值
+  histogram_threshold: 0.95 # 黑像素占比阈值
+  edge_threshold: 50        # 最大允许边缘像素数
+  brightness_threshold: 20   # 亮度均值阈值
+
+device_id: 0  # Try different camera indices
+fps: 30       # Adjust based on camera capability
+plugins:
+  - name: black_screen
+    module: plugins.black_screen_detector
+    class: BlackScreenDetector
+    config:
+      variance_threshold: 50
+
+  - name: artifact_detector
+    module: plugins.artifact_detector
+    class: ArtifactDetector
+    params:
+      black_threshold: 20    # 黑屏检测阈值
+      blur_threshold: 80     # 模糊检测阈值  
+      noise_threshold: 25    # 噪声检测阈值
+      detection_interval: 15 # 检测间隔帧数
+      alarm_duration: 10     # 告警持续帧数
+    config:
+      ssim_threshold: 0.85
