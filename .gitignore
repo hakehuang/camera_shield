@@ -155,3 +155,7 @@ cython_debug/
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# screen shop
+*.jpg
+*.png

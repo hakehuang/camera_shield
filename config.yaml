@@ -34,4 +34,5 @@ plugins:
       pattern_threshold: 0.5  # 花屏模式得分阈值
       variance_threshold: 50  # 图像方差阈值
       history_size: 5         # 帧历史记录大小
+      edge_pixels: 5000
       result_holding_frames: 5
