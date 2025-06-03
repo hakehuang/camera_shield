@@ -1,4 +1,5 @@
 import cv2
+import copy
 import numpy as np
 from uvc_core.plugin_base import DetectionPlugin
 
@@ -12,6 +13,7 @@ class BlackScreenDetector(DetectionPlugin):
             "edges": config.get("edge_threshold", 50),
             "brightness": config.get("brightness_threshold", 20),
         }
+        self.result_holding_frames = config.get("result_holding_frames", 5)
 
     def initialize(self):
         """初始化检测所需资源"""
@@ -62,12 +64,21 @@ class BlackScreenDetector(DetectionPlugin):
 
     def handle_results(self, result, frame):
         # 显示检测状态
+        if self.update_count > self.result_holding_frames:
+            self.old_result = copy.deepcopy(result)
 
-        is_black = result.get("is_black", False)
-        variance = result.get("Variance", False)
-        black_ratio = result.get("black_ratio", False)
-        edge_pixels = result.get("edge_pixels", False)
-        mean_brightness = result.get("mean_brightness", False)
+        if self.old_result:
+            is_black = self.old_result["is_black"]
+            variance = self.old_result["variance"]
+            black_ratio = self.old_result["black_ratio"]
+            edge_pixels = self.old_result["edge_pixels"]
+            mean_brightness = self.old_result["mean_brightness"]
+        else:
+            is_black = result["is_black"]
+            variance = result["variance"]
+            black_ratio = result["black_ratio"]
+            edge_pixels = result["edge_pixels"]
+            mean_brightness = result["mean_brightness"]
 
         status_text = "Black Screen Detected" if is_black else "Normal"
         color = (0, 0, 255) if is_black else (0, 255, 0)

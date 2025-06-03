@@ -1,4 +1,5 @@
 import cv2
+import copy
 import numpy as np
 from uvc_core.plugin_base import DetectionPlugin
 
@@ -16,6 +17,7 @@ class ArtifactDetector(DetectionPlugin):
         }
         self.frame_counter = 0
         self.detection_interval = config.get("detection_interval", 30)
+        self.result_holding_frames = config.get("result_holding_frames", 5)
 
     def initialize(self):
         """初始化检测所需资源"""
@@ -90,9 +92,18 @@ class ArtifactDetector(DetectionPlugin):
         }
 
     def handle_results(self, result, frame):
-        alerts = result["alerts"]
-        display_size = result["display_size"]
-        norm_mag = result["norm_mag"]
+
+        if self.update_count > self.result_holding_frames:
+            self.old_result = copy.deepcopy(result)
+
+        if self.old_result:
+            alerts = self.old_result["alerts"]
+            display_size = self.old_result["display_size"]
+            norm_mag = self.old_result["norm_mag"]
+        else:
+            alerts = result["alerts"]
+            display_size = result["display_size"]
+            norm_mag = result["norm_mag"]
 
         colored = cv2.applyColorMap(
             cv2.convertScaleAbs(norm_mag, alpha=1.5), cv2.COLORMAP_JET

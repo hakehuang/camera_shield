@@ -35,9 +35,6 @@ class Application:
                 if not ret:
                     continue
 
-                # Display frame with OpenCV
-                self.camera.show_frame(frame)
-
                 # Maintain OpenCV event loop
                 if cv2.waitKey(1) == 27:  # ESC key
                     break
@@ -47,6 +44,8 @@ class Application:
                     results[name] = plugin.process_frame(frame)
 
                 self.handle_results(results, frame)
+                analysis = self.camera.analyze_image(frame)
+                self.camera.show_analysis(analysis, frame)
                 self.camera.show_frame(frame)  # 添加预览窗口显示
                 time.sleep(1 / self.config.get("fps", 30))
 

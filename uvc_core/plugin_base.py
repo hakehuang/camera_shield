@@ -5,6 +5,8 @@ class DetectionPlugin(ABC):
     def __init__(self, name, config: Dict[str, Any]):
         self.name = name
         self.config = config
+        self.update_count = 0
+        self.old_result = {}
 
     @abstractmethod
     def initialize(self):
@@ -21,6 +23,7 @@ class DetectionPlugin(ABC):
     @abstractmethod
     def shutdown(self):
         """释放插件资源"""
+
 
 class PluginManager:
     def __init__(self):

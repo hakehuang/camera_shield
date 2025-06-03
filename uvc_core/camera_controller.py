@@ -41,8 +41,6 @@ class UVCCamera:
         return ret, frame
 
     def show_frame(self, frame):
-        analysis = self.analyze_image(frame)
-        self.show_analysis(analysis, frame)
         cv2.imshow(f"Camera Preview (Device {self.device_id})", frame)
         cv2.waitKey(1)
 

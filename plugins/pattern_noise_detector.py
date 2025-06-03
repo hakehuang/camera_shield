@@ -1,4 +1,5 @@
 import cv2
+import copy
 import numpy as np
 from uvc_core.plugin_base import DetectionPlugin
 
@@ -12,6 +13,7 @@ class PatternNoiseDetector(DetectionPlugin):
         }
         self.frame_history = []
         self.history_size = config.get("history_size", 5)
+        self.result_holding_frames = config.get("result_holding_frames", 5)
 
     def initialize(self):
         """初始化检测所需资源"""
@@ -68,8 +70,15 @@ class PatternNoiseDetector(DetectionPlugin):
     def handle_results(self, result, frame):
         # 在画面上显示检测结果
 
-        is_pattern_noise = result['is_pattern_noise']
-        current_score = result['pattern_score']
+        if self.update_count > self.result_holding_frames:
+            self.old_result = copy.deepcopy(result)
+
+        if self.old_result:
+            is_pattern_noise = self.old_result['is_pattern_noise']
+            current_score = self.old_result['pattern_score']
+        else:
+            is_pattern_noise = result['is_pattern_noise']
+            current_score = result['pattern_score']
 
         # 在右下角显示检测结果和得分
         cv2.putText(

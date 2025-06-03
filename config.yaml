@@ -13,6 +13,7 @@ plugins:
     config:
       variance_threshold: 50
       histogram_threshold: 0.8
+      result_holding_frames: 5
 
   - name: artifact_detector
     module: plugins.artifact_detector
@@ -24,6 +25,7 @@ plugins:
       detection_interval: 15 # 检测间隔帧数
       alarm_duration: 10     # 告警持续帧数
       ssim_threshold: 0.85
+      result_holding_frames: 5
 
   - name: pattern_noise
     module: plugins.pattern_noise_detector
@@ -32,3 +34,4 @@ plugins:
       pattern_threshold: 0.5  # 花屏模式得分阈值
       variance_threshold: 50  # 图像方差阈值
       history_size: 5         # 帧历史记录大小
+      result_holding_frames: 5
