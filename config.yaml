@@ -4,7 +4,7 @@ black_screen_detector:
   edge_threshold: 50        # 最大允许边缘像素数
   brightness_threshold: 20   # 亮度均值阈值
 
-device_id: 0  # Try different camera indices
+device_id: 1  # Try different camera indices
 fps: 30       # Adjust based on camera capability
 plugins:
   - name: black_screen
@@ -17,19 +17,18 @@ plugins:
   - name: artifact_detector
     module: plugins.artifact_detector
     class: ArtifactDetector
-    params:
+    config:
       black_threshold: 20    # 黑屏检测阈值
       blur_threshold: 80     # 模糊检测阈值  
       noise_threshold: 25    # 噪声检测阈值
       detection_interval: 15 # 检测间隔帧数
       alarm_duration: 10     # 告警持续帧数
-    config:
       ssim_threshold: 0.85
 
   - name: pattern_noise
     module: plugins.pattern_noise_detector
     class: PatternNoiseDetector
-    params:
+    config:
       pattern_threshold: 0.5  # 花屏模式得分阈值
       variance_threshold: 50  # 图像方差阈值
       history_size: 5         # 帧历史记录大小

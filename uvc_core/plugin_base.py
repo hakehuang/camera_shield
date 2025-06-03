@@ -2,7 +2,8 @@ from abc import ABC, abstractmethod
 from typing import Dict, Any
 
 class DetectionPlugin(ABC):
-    def __init__(self, config: Dict[str, Any]):
+    def __init__(self, name, config: Dict[str, Any]):
+        self.name = name
         self.config = config
 
     @abstractmethod
@@ -12,6 +13,10 @@ class DetectionPlugin(ABC):
     @abstractmethod
     def process_frame(self, frame) -> Dict[str, Any]:
         """处理视频帧并返回检测结果"""
+
+    @abstractmethod
+    def handle_results(self, result, frame):
+        """handle results"""
 
     @abstractmethod
     def shutdown(self):
