@@ -49,6 +49,8 @@ class Application:
     def run(self):
         try:
             self.camera.initialize()
+            for name, plugin in self.active_plugins.items():
+                plugin.initialize()
             while True:
                 ret, frame = self.camera.get_frame()
                 if not ret:
@@ -63,8 +65,8 @@ class Application:
                     results[name] = plugin.process_frame(frame)
 
                 self.handle_results(results, frame)
-                analysis = self.camera.analyze_image(frame)
-                self.camera.show_analysis(analysis, frame)
+                #analysis = self.camera.analyze_image(frame)
+                #self.camera.show_analysis(analysis, frame)
                 self.camera.show_frame(frame)  # 添加预览窗口显示
                 time.sleep(1 / self.config.get("fps", 30))
 
@@ -76,7 +78,6 @@ class Application:
         #for name, result in results.items():
         #    print(f"{name}: {result}")
         for name, plugin in self.active_plugins.items():
-            print(f"plugin {name}")
             if name in results:
                 plugin.handle_results(results[name], frame)
 

@@ -1,11 +1,11 @@
 
-device_id: 1  # Try different camera indices
+device_id: 0  # Try different camera indices
 fps: 30       # Adjust based on camera capability
 plugins:
   - name: black_screen
     module: plugins.black_screen_detector
     class: BlackScreenDetector
-    status: "enable"
+    #status: "enable"
     config:
       variance_threshold: 50
       histogram_threshold: 0.8
@@ -14,7 +14,7 @@ plugins:
   - name: artifact_detector
     module: plugins.artifact_detector
     class: ArtifactDetector
-    status: "enable"
+    #status: "enable"
     config:
       black_threshold: 20    # 黑屏检测阈值
       blur_threshold: 80     # 模糊检测阈值  
@@ -27,7 +27,7 @@ plugins:
   - name: pattern_noise
     module: plugins.pattern_noise_detector
     class: PatternNoiseDetector
-    status: "enable"
+    #status: "enable"
     config:
       pattern_threshold: 0.5  # 花屏模式得分阈值
       variance_threshold: 50  # 图像方差阈值
@@ -38,9 +38,10 @@ plugins:
   - name: signature
     module: plugins.signature_plugin
     class: VideoSignaturePlugin
-    #status: "enable"
+    status: "enable"
     config:
-      operations: "generate" # operation ('generate', 'compare')
+      operations: "compare" # operation ('generate', 'compare')
+      metadata: "flash_screen" # finger-print stored metadata
       directory: "./fingerprints" # fingerprints direcory to compare with not used in generate mode
       duration: 100 # number of frames to check
       method: "combined" #Signature method ('phash', 'dhash', 'histogram', 'combined')

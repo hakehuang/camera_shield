@@ -17,7 +17,7 @@ class VideoSignaturePlugin(DetectionPlugin):
         self.fingerprint = {
             "method": config.get("method", "combined"),
             "frame_signatures": [],
-            "metadata": {},
+            "metadata": config.get("metadata", "unknown"),
         }
         self.frame_count = 0
         self.operations = config.get("operations", "compare")
@@ -25,7 +25,9 @@ class VideoSignaturePlugin(DetectionPlugin):
 
     def initialize(self):
         """初始化检测所需资源"""
+        print("initialize")
         if self.operations == "compare":
+            print("compare")
             directory = self.config.get("directory", "./fingerprints")
             if os.path.isdir(directory):
                 self.load_all_fingerprints(directory)
@@ -413,7 +415,7 @@ class VideoSignaturePlugin(DetectionPlugin):
             "max_similarity": float(max_similarity),
             "temporal_consistency": float(temporal_consistency),
             "frame_similarities": [float(s) for s in frame_similarities],
-            "is_match": overall_similarity > 0.85,  # Threshold can be adjusted
+            "name": fp2["metadata"]
         }
 
     def identify_video(self, threshold=0.85) -> List[Dict]:
@@ -444,8 +446,6 @@ class VideoSignaturePlugin(DetectionPlugin):
 
         # Sort matches by similarity (highest first)
         matches.sort(key=lambda x: x["similarity"], reverse=True)
-
-        print(matches)
 
         return matches
 
@@ -481,24 +481,36 @@ class VideoSignaturePlugin(DetectionPlugin):
         }
 
     def handle_results(self, result, frame):
+        matched = []
         operations = self.config.get("operations", "compare")
         if result["frame_count"] == self.config.get("duration", 100):
             if operations == "compare":
-                self.identify_video(self.config.get("threshold", 0.85))
+                matched = self.identify_video(self.config.get("threshold", 0.85))
             elif operations == "generate":
                 self.save_fingerprint(self.config.get("directory", "./fingerprint"))
             else:
                 print("not supported operation")
 
-            cv2.putText(
-                frame,
-                "signature done",
-                (150, frame.shape[0] - 90),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                0.7,
-                (0, 0, 255),
-                2,
-            )
+            if matched:
+                cv2.putText(
+                    frame,
+                    f"match with {matched[0]["details"]["name"]} :{matched[0]["similarity"]:.2f}",
+                    (150, frame.shape[0] - 90),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.7,
+                    (0, 0, 255),
+                    2,
+                )
+            else:
+                cv2.putText(
+                    frame,
+                    "signature done",
+                    (150, frame.shape[0] - 90),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.7,
+                    (0, 0, 255),
+                    2,
+                )
         else:
             cv2.putText(
                 frame,

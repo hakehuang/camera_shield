@@ -47,7 +47,6 @@ class ArtifactDetector(DetectionPlugin):
 
     def process_frame(self, frame):
         self.frame_counter += 1
-        print("a frame check\n")
         # 每帧执行频谱分析（独立于检测逻辑）
         try:
             h, w = frame.shape[:2]
