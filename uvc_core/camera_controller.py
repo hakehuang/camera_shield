@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from typing import Optional, Any
+from typing import Optional, Any, List, Dict, Tuple
 
 
 class UVCCamera:
@@ -10,6 +10,8 @@ class UVCCamera:
         self.prev_frame = None
         self.current_alarms = 0
         self.alarm_duration = 5  # 告警持续帧数
+        self.fingerprint_cache = {}  # Store video fingerprints
+        self._original_wb = 0
 
     def initialize(self):
         if not self.cap.isOpened():

@@ -6,7 +6,7 @@ from uvc_core.plugin_base import DetectionPlugin
 
 class PatternNoiseDetector(DetectionPlugin):
     def __init__(self, name, config):
-        super().__init__(name, "PatternNoiseDetector")
+        super().__init__(name, config)
         self.thresholds = {
             "pattern_score": config.get("pattern_threshold", 0.5),
             "variance_threshold": config.get("variance_threshold", 50),
