@@ -17,7 +17,7 @@ class VideoSignaturePlugin(DetectionPlugin):
         self.fingerprint = {
             "method": config.get("method", "combined"),
             "frame_signatures": [],
-            "metadata": config.get("metadata", "unknown"),
+            "metadata": config.get("metadata", {}),
         }
         self.frame_count = 0
         self.operations = config.get("operations", "compare")
@@ -415,7 +415,8 @@ class VideoSignaturePlugin(DetectionPlugin):
             "max_similarity": float(max_similarity),
             "temporal_consistency": float(temporal_consistency),
             "frame_similarities": [float(s) for s in frame_similarities],
-            "name": fp2["metadata"]
+            "name": fp2["metadata"]["name"],
+            "metadata": fp2["metadata"]
         }
 
     def identify_video(self, threshold=0.85) -> List[Dict]:

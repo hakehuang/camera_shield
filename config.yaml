@@ -41,11 +41,13 @@ plugins:
     status: "enable"
     config:
       operations: "compare" # operation ('generate', 'compare')
-      metadata: "flash_screen" # finger-print stored metadata
+      metadata:
+        name: "blank_screen" # finger-print stored metadata
+        platform: "frdm_mcxn947"
       directory: "./fingerprints" # fingerprints direcory to compare with not used in generate mode
       duration: 100 # number of frames to check
       method: "combined" #Signature method ('phash', 'dhash', 'histogram', 'combined')
-      threshold: 0.85
+      threshold: 0.65
       phash_weight: 0.35
       dhash_weight: 0.25
       histogram_weight: 0.2
