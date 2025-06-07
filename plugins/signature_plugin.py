@@ -22,6 +22,7 @@ class VideoSignaturePlugin(DetectionPlugin):
         self.frame_count = 0
         self.operations = config.get("operations", "compare")
         self.saved = False
+        self.result = []
 
     def initialize(self):
         """初始化检测所需资源"""
@@ -493,6 +494,8 @@ class VideoSignaturePlugin(DetectionPlugin):
                 print("not supported operation")
 
             if matched:
+                if matched[0]["details"]["name"] not in self.result:
+                    self.result.append(matched[0]["details"]["name"])
                 cv2.putText(
                     frame,
                     f"match with {matched[0]["details"]["name"]} :{matched[0]["similarity"]:.2f}",
@@ -523,7 +526,9 @@ class VideoSignaturePlugin(DetectionPlugin):
                 2,
             )
 
-
     def shutdown(self):
         """释放插件资源"""
-        pass
+        if self.result:
+            print(f"{self.__class__.__name__} result: {self.result}\n")
+        else:
+            print(f"{self.__class__.__name__} result: no match\n")

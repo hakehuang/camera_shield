@@ -48,6 +48,7 @@ class Application:
 
     def run(self):
         try:
+            start_time = time.time()
             self.camera.initialize()
             for name, plugin in self.active_plugins.items():
                 plugin.initialize()
@@ -68,9 +69,15 @@ class Application:
                 #analysis = self.camera.analyze_image(frame)
                 #self.camera.show_analysis(analysis, frame)
                 self.camera.show_frame(frame)  # 添加预览窗口显示
-                time.sleep(1 / self.config.get("fps", 30))
+                frame_delay = 1 / self.config.get("fps", 30)
+                if 'run_time' in self.config:
+                    if time.time() - start_time > self.config['run_time']:
+                        break
+                time.sleep(frame_delay)
 
         except KeyboardInterrupt:
+            print("quit by key input\n")
+        finally:
             self.shutdown()
 
     def handle_results(self, results, frame):
