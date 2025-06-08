@@ -9,14 +9,14 @@ class UVCCamera:
         self.cap = cv2.VideoCapture(device_id)
         self.prev_frame = None
         self.current_alarms = 0
-        self.alarm_duration = 5  # 告警持续帧数
+        self.alarm_duration = 5  # Alarm duration in frames
         self.fingerprint_cache = {}  # Store video fingerprints
         self._original_wb = 0
 
     def initialize(self):
         if not self.cap.isOpened():
             raise Exception(f"Failed to open camera {self.device_id}")
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # 设置分辨率
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # Set resolution
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
         self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
         # Read initial 10 frames to stabilize camera
@@ -47,39 +47,39 @@ class UVCCamera:
         cv2.waitKey(1)
 
     def auto_focus(self, enable: bool):
-        """自动对焦控制
+        """Auto focus control
 
-        参数:
-            enable: True启用自动对焦，False禁用
+        Args:
+            enable: True to enable auto focus, False to disable
         """
         self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 1 if enable else 0)
 
     def smart_focus(self, frame):
-        """基于图像清晰度的智能对焦算法
+        """Smart focus algorithm based on image sharpness
 
-        参数:
-            frame: 当前视频帧
+        Args:
+            frame: Current video frame
 
-        返回:
-            对焦评分值(0-1)
+        Returns:
+            Focus score value (0-1)
         """
         if frame is None:
             return 0
 
-        # 转换为灰度图
+        # Convert to grayscale
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
 
-        # 计算拉普拉斯方差作为清晰度指标
+        # Calculate Laplacian variance as sharpness metric
         laplacian = cv2.Laplacian(gray, cv2.CV_64F)
-        focus_score = laplacian.var() / 1000  # 归一化到0-1范围
+        focus_score = laplacian.var() / 1000  # Normalized to 0-1 range
 
-        # 根据清晰度调整对焦
-        if focus_score < 0.3:  # 图像模糊
+        # Adjust focus based on sharpness
+        if focus_score < 0.3:  # Image is blurry
             self.auto_focus(True)
-        elif focus_score > 0.7:  # 图像清晰
+        elif focus_score > 0.7:  # Image is sharp
             self.auto_focus(False)
 
-        return min(max(focus_score, 0), 1)  # 确保在0-1范围内
+        return min(max(focus_score, 0), 1)  # Ensure value is within 0-1 range
 
     def auto_white_balance(self, enable):
         """Enable/disable auto white balance with algorithm optimization"""
@@ -138,18 +138,18 @@ class UVCCamera:
             return None
 
         analysis = {}
-        # 亮度分析
+        # Brightness analysis
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         analysis["brightness"] = np.mean(gray)
 
-        # 色彩分析
+        # Color analysis
         lab = cv2.cvtColor(image, cv2.COLOR_BGR2LAB)
         analysis["color_balance"] = {
             "a_channel": np.mean(lab[:, :, 1]),
             "b_channel": np.mean(lab[:, :, 2]),
         }
 
-        # 清晰度分析
+        # Sharpness analysis
         analysis["sharpness"] = cv2.Laplacian(gray, cv2.CV_64F).var()
 
         return analysis
@@ -160,7 +160,7 @@ class UVCCamera:
             print("No analysis results to display")
             return
 
-        # 打印分析结果
+        # Print analysis results
         print("Image Analysis Results:")
         print(f"  Brightness: {analysis['brightness']:.2f}")
         print(
@@ -247,7 +247,7 @@ class UVCCamera:
         if not results:
             return None
 
-        # 计算平均值
+        # Calculate averages
         avg_analysis = {
             "brightness": np.mean([r["brightness"] for r in results]),
             "color_balance": {

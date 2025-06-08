@@ -1,38 +1,38 @@
-# UVC摄像头质量检测框架
+# UVC Camera Quality Detection Framework
 
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 
-实时检测摄像头画面异常（黑屏/花屏/伪影），支持插件式扩展检测算法
+Real-time detection of camera anomalies (black screen/pattern noise/artifacts) with plugin-based algorithm extension
 
-## 功能特性
-- 🎥 自动对焦/白平衡控制
-- 🔌 模块化插件系统
-- 📊 多维检测指标输出
-- ⚙️ 动态配置热加载
+## Features
+- 🎥 Auto focus/white balance control
+- 🔌 Modular plugin system
+- 📊 Multi-dimensional detection metrics output
+- ⚙️ Dynamic configuration hot-reloading
 
-## 安装指南
+## Installation Guide
 ```powershell
-# 创建虚拟环境
+# Create virtual environment
 python -m venv .ven
 
-# 激活环境
+# Activate environment
 .venv\Scripts\activate
 
-# 安装依赖
-uv pip install -r requirements.txt  # 或使用 pip install -r requirements.txt
+# Install dependencies
+uv pip install -r requirements.txt  # or use pip install -r requirements.txt
 ```
 
-## 快速开始
+## Quick Start
 ```python
-# 运行检测程序
+# Run detection program
 python main.py --config config.yaml
 
-# 实时输出示例
-[DEBUG] 帧率:30 | 黑屏检测:正常 | 方差:85.6 | 亮度均值:127
-[ALERT] 检测到黑屏! 方差:12.3 < 阈值50
+# Real-time output example
+[DEBUG] FPS:30 | Black screen:Normal | Variance:85.6 | Brightness:127
+[ALERT] Black screen detected! Variance:12.3 < threshold 50
 ```
 
-## 配置文件
+## Configuration
 ```yaml:c:\github\uvc_shield\config.yaml
 device_id: 0
 frame_rate: 30
@@ -44,10 +44,10 @@ plugins:
     brightness_threshold: 20
 ```
 
-## 插件开发
-1. 在`plugins/`目录创建新插件
-2. 继承`DetectionPlugin`基类
-3. 注册到`PluginManager`
+## Plugin Development
+1. Create new plugin in `plugins/` directory
+2. Extend `DetectionPlugin` base class
+3. Register with `PluginManager`
 ```python
 from uvc_core.plugin_base import DetectionPlugin
 
@@ -57,10 +57,10 @@ class ArtifactDetector(DetectionPlugin):
         return {'is_artifact': False}
 ```
 
-## 贡献指南
-欢迎提交PR完善以下内容：
-- 更多图像异常检测算法
-- 可视化数据看板
-- 单元测试用例
+## Contribution Guide
+PR contributions are welcome to improve the following:
+- More image anomaly detection algorithms
+- Visualization dashboard
+- Unit test cases
 
-许可证：MIT
+License: MIT

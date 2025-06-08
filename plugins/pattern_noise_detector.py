@@ -17,11 +17,11 @@ class PatternNoiseDetector(DetectionPlugin):
         self.result_holding_frames = config.get("result_holding_frames", 5)
 
     def initialize(self):
-        """初始化检测所需资源"""
+        """Initialize detection resources"""
         pass
 
     def _calculate_pattern_score(self, frame):
-        """计算花屏模式得分"""
+        """Calculate pattern noise score"""
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # Sharpen the image before edge detection
@@ -34,41 +34,41 @@ class PatternNoiseDetector(DetectionPlugin):
         edge_pixels = np.count_nonzero(edges)
         cv2.imwrite("edges.jpg", edges)
 
-        # 1. 计算图像方差
+        # 1. Calculate image variance
         variance = np.var(gray)
         if variance < self.thresholds["variance_threshold"]:
             return 0.0
 
-        # 2. FFT频谱分析
+        # 2. FFT spectrum analysis
         fft = np.fft.fft2(gray.astype(float))
         fft_shift = np.fft.fftshift(fft)
         magnitude = np.log(np.abs(fft_shift) + 1e-5)
 
-        # 3. 检测高频和低频能量分布
+        # 3. Detect high/low frequency energy distribution
         h, w = gray.shape
         center_y, center_x = h // 2, w // 2
 
-        # 计算不同区域的能量分布
+        # Calculate energy distribution in different regions
         low_freq = magnitude[
             center_y - 10 : center_y + 10, center_x - 10 : center_x + 10
         ].mean()
         high_freq = magnitude.mean() - low_freq
 
-        # 4. 计算模式得分
+        # 4. Calculate pattern score
         pattern_score = abs(high_freq) / (low_freq + 1e-5)
         return pattern_score, edge_pixels
 
     def process_frame(self, frame):
-        """处理视频帧，检测花屏"""
-        # 计算当前帧的模式得分
+        """Process video frame to detect pattern noise"""
+        # Calculate current frame's pattern score
         current_score, edge_pixels = self._calculate_pattern_score(frame)
 
-        # 维护帧历史记录
+        # Maintain frame history
         self.frame_history.append(current_score)
         if len(self.frame_history) > self.history_size:
             self.frame_history.pop(0)
 
-        # 判断是否为花屏
+        # Determine if it's pattern noise
         is_pattern_noise = current_score > self.thresholds["pattern_score"] or \
                             edge_pixels > self.thresholds["edge_pixels"]
 
@@ -81,7 +81,7 @@ class PatternNoiseDetector(DetectionPlugin):
         }
 
     def handle_results(self, result, frame):
-        # 在画面上显示检测结果
+        # Display detection results on screen
 
         if self.update_count > self.result_holding_frames:
             self.old_result = copy.deepcopy(result)
@@ -95,7 +95,7 @@ class PatternNoiseDetector(DetectionPlugin):
             current_score = result['pattern_score']
             edge_pixels = result['edge_pixels']
 
-        # 在右下角显示检测结果和得分
+        # Display detection results and score in bottom right corner
         cv2.putText(
             frame,
             f"edge: {edge_pixels:.2f}",
@@ -127,5 +127,5 @@ class PatternNoiseDetector(DetectionPlugin):
 
 
     def shutdown(self):
-        """释放插件资源"""
+        """Release plugin resources"""
         pass

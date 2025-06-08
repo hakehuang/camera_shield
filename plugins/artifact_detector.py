@@ -8,7 +8,7 @@ class ArtifactDetector(DetectionPlugin):
     def __init__(self, name, config):
         super().__init__(name, config)
         self.prev_frame = None
-        self.alarm_duration = config.get("alarm_duration", 5)  # 告警持续帧数
+        self.alarm_duration = config.get("alarm_duration", 5)  # Alarm duration in frames
         self.current_alarms = 0
         self.thresholds = {
             "black_level": config.get("black_threshold", 15),
@@ -20,7 +20,7 @@ class ArtifactDetector(DetectionPlugin):
         self.result_holding_frames = config.get("result_holding_frames", 5)
 
     def initialize(self):
-        """初始化检测所需资源"""
+        """Initialize detection resources"""
         # 可以在这里初始化任何需要的资源
         pass
 
@@ -47,33 +47,33 @@ class ArtifactDetector(DetectionPlugin):
 
     def process_frame(self, frame):
         self.frame_counter += 1
-        # 每帧执行频谱分析（独立于检测逻辑）
+        # Perform spectrum analysis on each frame (independent of detection logic)
         try:
             h, w = frame.shape[:2]
-            display_size = min(h, w) // 3  # 动态显示尺寸
+            display_size = min(h, w) // 3  # Dynamic display size
 
-            # 颜色空间转换（摄像头输出是RGB）
+            # Color space conversion (camera output is RGB)
             analysis_roi = frame[10 : 10 + display_size, 10 : 10 + display_size]
             gray = cv2.cvtColor(analysis_roi, cv2.COLOR_RGB2GRAY)
 
-            # 调试信息
-            print(f"[DEBUG] 灰度范围: {np.min(gray)}-{np.max(gray)}")
+            # Debug informatio
+            print(f"[DEBUG] Grayscale range: {np.min(gray)}-{np.max(gray)}")
 
-            # FFT计算
+            # FFT calculation
             fft = np.fft.fft2(gray.astype(float))
             fft_shift = np.fft.fftshift(fft)
             magnitude = 20 * np.log(np.abs(fft_shift) + 1e-5)
 
-            # 增强可视化效果
+            # Enhanced visualization
             norm_mag = cv2.normalize(magnitude, None, 0, 255, cv2.NORM_MINMAX)
 
         except Exception as e:
-            print(f"[ERROR] 频谱处理失败: {e}")
+            print(f"[ERROR] Spectrum processing failed: {e}")
             import traceback
 
             traceback.print_exc()
 
-        # 核心检测逻辑
+        # Core detection logic
         alerts = []
         if self.frame_counter % self.detection_interval == 0:
             if self._detect_black_screen(frame):
@@ -108,7 +108,7 @@ class ArtifactDetector(DetectionPlugin):
             cv2.convertScaleAbs(norm_mag, alpha=1.5), cv2.COLORMAP_JET
         )
 
-        # 叠加显示
+        # Overlay display
         overlay = cv2.resize(colored, (display_size, display_size))
         cv2.addWeighted(
             overlay,
@@ -119,7 +119,7 @@ class ArtifactDetector(DetectionPlugin):
             frame[10 : 10 + display_size, 10 : 10 + display_size],
         )
 
-        # 绘制绿色边框
+        # Draw green border
         cv2.rectangle(
             frame, (10, 10), (10 + display_size, 10 + display_size), (0, 255, 0), 2
         )
@@ -135,7 +135,7 @@ class ArtifactDetector(DetectionPlugin):
                 2,
             )
 
-        # 告警状态处理
+        # Alarm state handling
         if self.current_alarms > 0:
             self.current_alarms -= 1
             frame = cv2.copyMakeBorder(
@@ -143,5 +143,5 @@ class ArtifactDetector(DetectionPlugin):
             )
 
     def shutdown(self):
-        """释放插件资源"""
+        """Release plugin resources"""
         pass

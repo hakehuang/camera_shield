@@ -16,35 +16,35 @@ class BlackScreenDetector(DetectionPlugin):
         self.result_holding_frames = config.get("result_holding_frames", 5)
 
     def initialize(self):
-        """初始化检测所需资源"""
-        # 可以在这里初始化任何需要的资源
+        """Initialize detection resources"""
+        # Can initialize any required resources here
         pass
 
     def process_frame(self, frame):
         print("black frame check\n")
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        # 多算法检测
+        # Multi-algorithm detection
         variance = np.var(gray)
 
-        # 直方图分析（黑屏像素占比）
+        # Histogram analysis (black pixel ratio)
         hist = cv2.calcHist([gray], [0], None, [256], [0, 256])
         black_ratio = np.sum(hist[:20]) / gray.size
 
-        # 预处理：高斯模糊和阈值处理
+        # Preprocessing: Gaussian blur and thresholding
         blurred = cv2.GaussianBlur(gray, (5, 5), 0)
         _, thresholded = cv2.threshold(
             blurred, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU
         )
 
-        # 边缘检测（Canny边缘数量）
+        # Edge detection (Canny edge count)
         edges = cv2.Canny(thresholded, 100, 200)
         edge_pixels = np.count_nonzero(edges)
 
-        # 亮度均值检测
+        # Brightness mean detection
         mean_brightness = np.mean(gray)
 
-        # 在帧上显示检测结果
-        # 投票机制：至少满足3个条件才判定为黑屏
+        # Display detection results on frame
+        # Voting mechanism: at least 3 conditions to determine black screen
         vote_count = (
             int(variance < self.threshold["variance"])
             + int(black_ratio > self.threshold["histogram"])
@@ -63,7 +63,7 @@ class BlackScreenDetector(DetectionPlugin):
         }
 
     def handle_results(self, result, frame):
-        # 显示检测状态
+        # Display detection status
         if self.update_count > self.result_holding_frames:
             self.old_result = copy.deepcopy(result)
 
@@ -95,7 +95,7 @@ class BlackScreenDetector(DetectionPlugin):
             2,
         )
 
-        # 显示详细指标
+        # Display detailed metrics
         cv2.putText(
             frame,
             f"Variance: {variance:.2f}",

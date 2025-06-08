@@ -17,11 +17,11 @@ plugins:
     class: ArtifactDetector
     #status: "enable"
     config:
-      black_threshold: 20    # 黑屏检测阈值
-      blur_threshold: 80     # 模糊检测阈值  
-      noise_threshold: 25    # 噪声检测阈值
-      detection_interval: 15 # 检测间隔帧数
-      alarm_duration: 10     # 告警持续帧数
+      black_threshold: 20    # Black screen detection threshold
+      blur_threshold: 80     # Blur detection threshold  
+      noise_threshold: 25    # Noise detection threshold
+      detection_interval: 15 # Detection interval in frames
+      alarm_duration: 10     # Alarm duration in frames
       ssim_threshold: 0.85
       result_holding_frames: 5
 
@@ -30,9 +30,9 @@ plugins:
     class: PatternNoiseDetector
     #status: "enable"
     config:
-      pattern_threshold: 0.5  # 花屏模式得分阈值
-      variance_threshold: 50  # 图像方差阈值
-      history_size: 5         # 帧历史记录大小
+      pattern_threshold: 0.5  # Pattern noise score threshold
+      variance_threshold: 50  # Image variance threshold
+      history_size: 5         # Frame history size
       edge_pixels: 5000
       result_holding_frames: 5
 

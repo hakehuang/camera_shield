@@ -25,7 +25,7 @@ class VideoSignaturePlugin(DetectionPlugin):
         self.result = []
 
     def initialize(self):
-        """初始化检测所需资源"""
+        """Initialize detection resources"""
         print("initialize")
         if self.operations == "compare":
             print("compare")
@@ -527,7 +527,7 @@ class VideoSignaturePlugin(DetectionPlugin):
             )
 
     def shutdown(self):
-        """释放插件资源"""
+        """Release plugin resources"""
         if self.result:
             print(f"{self.__class__.__name__} result: {self.result}\n")
         else:
