@@ -7,14 +7,26 @@ import os
 import sys
 import io
 import importlib
+import argparse
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 import yaml
 import time
 from string import Template
 import cv2
-from camera_shield.uvc_core.camera_controller import UVCCamera
-from camera_shield.uvc_core.plugin_base import PluginManager
+from .uvc_core.camera_controller import UVCCamera
+from .uvc_core.plugin_base import PluginManager
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='Process some arguments.')
+    parser.add_argument('-c', '--config', 
+                        help='Path to the configuration file',
+                        required=False,
+                        type=str)
+    
+    args = parser.parse_args()
+    return args
 
 class Application:
     def __init__(self, config_path="config.yaml"):
@@ -114,5 +126,6 @@ class Application:
 
 
 if __name__ == "__main__":
-    app = Application()
+    args = parse_arguments()
+    app = Application(args.config)
     app.run()

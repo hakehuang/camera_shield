@@ -25,17 +25,11 @@ uv pip install -r requirements.txt  # or use pip install -r requirements.txt
 ## Quick Start
 ```python
 # Run detection program
-python main.py --config config.yaml
-
-# Real-time output example
-[DEBUG] FPS:30 | Black screen:Normal | Variance:85.6 | Brightness:127
-[ALERT] Black screen detected! Variance:12.3 < threshold 50
+python -m camera_shield.main --config camera_shield/config.yaml
 ```
 
 ## Configuration
 ```yaml:c:\github\uvc_shield\config.yaml
-device_id: 0
-frame_rate: 30
 plugins:
   black_screen_detector:
     variance_threshold: 50
@@ -53,7 +47,6 @@ from uvc_core.plugin_base import DetectionPlugin
 
 class ArtifactDetector(DetectionPlugin):
     def process_frame(self, frame):
-        # 实现你的检测逻辑
         return {'is_artifact': False}
 ```
 

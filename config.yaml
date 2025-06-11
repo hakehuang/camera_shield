@@ -11,7 +11,7 @@ tests:
   expect: ["sample.display.shield"]
 plugins:
   - name: black_screen
-    module: plugins.black_screen_detector
+    module: .plugins.black_screen_detector
     class: BlackScreenDetector
     #status: "enable"
     config:
@@ -20,7 +20,7 @@ plugins:
       result_holding_frames: 5
 
   - name: artifact_detector
-    module: plugins.artifact_detector
+    module: .plugins.artifact_detector
     class: ArtifactDetector
     #status: "enable"
     config:
@@ -33,7 +33,7 @@ plugins:
       result_holding_frames: 5
 
   - name: pattern_noise
-    module: plugins.pattern_noise_detector
+    module: .plugins.pattern_noise_detector
     class: PatternNoiseDetector
     #status: "enable"
     config:
@@ -44,7 +44,7 @@ plugins:
       result_holding_frames: 5
 
   - name: signature
-    module: plugins.signature_plugin
+    module: .plugins.signature_plugin
     class: VideoSignaturePlugin
     status: "enable"
     config:
@@ -52,7 +52,7 @@ plugins:
       metadata:
         name: "test.display.shield" # finger-print stored metadata
         platform: "frdm_mcxn947"
-      directory: "./fingerprints" # fingerprints directory to compare with not used in generate mode
+      directory: "./camera_shield/fingerprints" # fingerprints directory to compare with not used in generate mode
       duration: 100 # number of frames to check
       method: "combined" #Signature method ('phash', 'dhash', 'histogram', 'combined')
       threshold: 0.65
