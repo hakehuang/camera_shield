@@ -1,7 +1,7 @@
 
 device_id: 0  # Try different camera indices
 fps: 30       # Adjust based on camera capability
-run_time: 20  # Run for 20 seconds
+run_time: 30  # Run for 30 seconds
 plugins:
   - name: black_screen
     module: plugins.black_screen_detector
@@ -43,7 +43,7 @@ plugins:
     config:
       operations: "compare" # operation ('generate', 'compare')
       metadata:
-        name: "camera_coverred" # finger-print stored metadata
+        name: "test.display.shield" # finger-print stored metadata
         platform: "frdm_mcxn947"
       directory: "./fingerprints" # fingerprints direcory to compare with not used in generate mode
       duration: 100 # number of frames to check

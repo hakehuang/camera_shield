@@ -1,5 +1,4 @@
 opencv-python==4.9.0.80
 numpy==1.26.4
 pyyaml==6.0.1
-python-v4l2==0.3; sys_platform == 'linux'
 pyyaml

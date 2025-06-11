@@ -26,6 +26,7 @@ class Application:
                 return template.safe_substitute(os.environ)
             else:
                 return yaml_dict
+        os.environ["DISPLAY"] = ":0"
         self.active_plugins = {}  # Initialize empty plugin dictionary
         with open(config_path, "r", encoding="utf-8-sig") as f:
             config = yaml.safe_load(f)

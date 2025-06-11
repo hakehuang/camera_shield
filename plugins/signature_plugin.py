@@ -498,7 +498,7 @@ class VideoSignaturePlugin(DetectionPlugin):
                     self.result.append(matched[0]["details"]["name"])
                 cv2.putText(
                     frame,
-                    f"match with {matched[0]["details"]["name"]} :{matched[0]["similarity"]:.2f}",
+                    f'match with {matched[0]["details"]["name"]} :{matched[0]["similarity"]:.2f}',
                     (150, frame.shape[0] - 90),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.7,
