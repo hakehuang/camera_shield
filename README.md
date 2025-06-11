@@ -63,4 +63,4 @@ PR contributions are welcome to improve the following:
 - Visualization dashboard
 - Unit test cases
 
-License: MIT
+License: Apache-2.0

@@ -1,4 +1,4 @@
-# Copyright (c) 2025 NXP
+# Copyright 2025 Hake Huang <hakehuang@gmail.com>
 #
 # SPDX-License-Identifier: Apache-2.0
 

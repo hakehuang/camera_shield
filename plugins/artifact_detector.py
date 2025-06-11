@@ -1,3 +1,7 @@
+# Copyright 2025 Hake Huang <hakehuang@gmail.com>
+#
+# SPDX-License-Identifier: Apache-2.0
+
 import cv2
 import copy
 import numpy as np
