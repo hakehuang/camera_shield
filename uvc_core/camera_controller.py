@@ -1,12 +1,18 @@
+# Copyright (c) 2025 NXP
+#
+# SPDX-License-Identifier: Apache-2.0
+
 import cv2
 import numpy as np
 from typing import Optional, Any, List, Dict, Tuple
 
 
 class UVCCamera:
-    def __init__(self, device_id=0):
-        self.device_id = device_id
-        self.cap = cv2.VideoCapture(device_id)
+    def __init__(self, config):
+        self.device_id = config.get("device_id", 0)
+        self.res_x = config.get("res_x", 1280)
+        self.res_y = config.get("res_y", 720)
+        self.cap = cv2.VideoCapture(self.device_id)
         self.prev_frame = None
         self.current_alarms = 0
         self.alarm_duration = 5  # Alarm duration in frames
@@ -16,8 +22,8 @@ class UVCCamera:
     def initialize(self):
         if not self.cap.isOpened():
             raise Exception(f"Failed to open camera {self.device_id}")
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # Set resolution
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.res_x)  # Set resolution
+        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.res_y)
         self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
         # Read initial 10 frames to stabilize camera
         for _ in range(10):
@@ -84,10 +90,8 @@ class UVCCamera:
     def auto_white_balance(self, enable):
         """Enable/disable auto white balance with algorithm optimization"""
         if enable:
-            # 保存当前白平衡设置
             self._original_wb = self.cap.get(cv2.CAP_PROP_WB_TEMPERATURE)
 
-            # 启用自动白平衡
             self.cap.set(cv2.CAP_PROP_AUTO_WB, 1)
 
             # Sample frames and analyze white balance
@@ -109,7 +113,6 @@ class UVCCamera:
                 if len(wb_scores) > 1 and wb_score < min(wb_scores[:-1]) * 0.9:
                     break
         else:
-            # 恢复原始白平衡设置
             if hasattr(self, "_original_wb"):
                 self.cap.set(cv2.CAP_PROP_AUTO_WB, 0)
                 self.cap.set(cv2.CAP_PROP_WB_TEMPERATURE, self._original_wb)

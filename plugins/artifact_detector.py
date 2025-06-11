@@ -18,6 +18,7 @@ class ArtifactDetector(DetectionPlugin):
         self.frame_counter = 0
         self.detection_interval = config.get("detection_interval", 30)
         self.result_holding_frames = config.get("result_holding_frames", 5)
+        self.result = []
 
     def initialize(self):
         """Initialize detection resources"""
@@ -125,6 +126,7 @@ class ArtifactDetector(DetectionPlugin):
         )
         if alerts:
             self.current_alarms = self.alarm_duration
+            self.result = ['find_artifact']
             cv2.putText(
                 frame,
                 f"Alerts: {', '.join(alerts)}",
@@ -142,6 +144,6 @@ class ArtifactDetector(DetectionPlugin):
                 frame, 5, 5, 5, 5, cv2.BORDER_CONSTANT, value=(0, 0, 255)
             )
 
-    def shutdown(self):
+    def shutdown(self) -> list:
         """Release plugin resources"""
-        pass
+        return self.result

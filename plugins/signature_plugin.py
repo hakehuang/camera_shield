@@ -1,3 +1,7 @@
+# Copyright (c) 2025 NXP
+#
+# SPDX-License-Identifier: Apache-2.0
+
 import cv2
 import numpy as np
 import hashlib
@@ -5,7 +9,7 @@ import pickle
 import os
 from datetime import datetime
 from typing import Dict, List, Optional, Any, Tuple
-from uvc_core.plugin_base import DetectionPlugin
+from camera_shield.uvc_core.plugin_base import DetectionPlugin
 
 
 class VideoSignaturePlugin(DetectionPlugin):
@@ -498,7 +502,7 @@ class VideoSignaturePlugin(DetectionPlugin):
                     self.result.append(matched[0]["details"]["name"])
                 cv2.putText(
                     frame,
-                    f'match with {matched[0]["details"]["name"]} :{matched[0]["similarity"]:.2f}',
+                    f"match with {matched[0]['details']['name']} :{matched[0]['similarity']:.2f}",
                     (150, frame.shape[0] - 90),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.7,
@@ -526,9 +530,11 @@ class VideoSignaturePlugin(DetectionPlugin):
                 2,
             )
 
-    def shutdown(self):
+    def shutdown(self) -> list:
         """Release plugin resources"""
         if self.result:
             print(f"{self.__class__.__name__} result: {self.result}\n")
         else:
             print(f"{self.__class__.__name__} result: no match\n")
+
+        return self.result

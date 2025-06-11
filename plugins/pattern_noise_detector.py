@@ -15,6 +15,7 @@ class PatternNoiseDetector(DetectionPlugin):
         self.frame_history = []
         self.history_size = config.get("history_size", 5)
         self.result_holding_frames = config.get("result_holding_frames", 5)
+        self.result = []
 
     def initialize(self):
         """Initialize detection resources"""
@@ -95,6 +96,9 @@ class PatternNoiseDetector(DetectionPlugin):
             current_score = result['pattern_score']
             edge_pixels = result['edge_pixels']
 
+        if is_pattern_noise:
+            self.result = ["patter noise"]
+
         # Display detection results and score in bottom right corner
         cv2.putText(
             frame,
@@ -125,7 +129,6 @@ class PatternNoiseDetector(DetectionPlugin):
         )
 
 
-
-    def shutdown(self):
+    def shutdown(self) -> list:
         """Release plugin resources"""
-        pass
+        return self.result

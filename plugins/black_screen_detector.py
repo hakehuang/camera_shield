@@ -14,6 +14,7 @@ class BlackScreenDetector(DetectionPlugin):
             "brightness": config.get("brightness_threshold", 20),
         }
         self.result_holding_frames = config.get("result_holding_frames", 5)
+        self.result = []
 
     def initialize(self):
         """Initialize detection resources"""
@@ -80,6 +81,9 @@ class BlackScreenDetector(DetectionPlugin):
             edge_pixels = result["edge_pixels"]
             mean_brightness = result["mean_brightness"]
 
+        if is_black:
+            self.result = ["black screen detected"]
+
         status_text = "Black Screen Detected" if is_black else "Normal"
         color = (0, 0, 255) if is_black else (0, 255, 0)
         text_width = cv2.getTextSize(status_text, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)[0][
@@ -133,5 +137,6 @@ class BlackScreenDetector(DetectionPlugin):
             1,
         )
 
-    def shutdown(self):
-        pass
+    def shutdown(self) -> list:
+        """Release plugin resources"""
+        return self.result

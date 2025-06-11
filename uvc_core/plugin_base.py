@@ -1,3 +1,7 @@
+# Copyright (c) 2025 NXP
+#
+# SPDX-License-Identifier: Apache-2.0
+
 from abc import ABC, abstractmethod
 from typing import Dict, Any
 
@@ -10,19 +14,19 @@ class DetectionPlugin(ABC):
 
     @abstractmethod
     def initialize(self):
-        """初始化检测所需资源"""
+        """initialize"""
 
     @abstractmethod
     def process_frame(self, frame) -> Dict[str, Any]:
-        """处理视频帧并返回检测结果"""
+        """process_frame"""
 
     @abstractmethod
     def handle_results(self, result, frame):
-        """handle results"""
+        """handle_results"""
 
     @abstractmethod
-    def shutdown(self):
-        """释放插件资源"""
+    def shutdown(self) -> list:
+        """release resources"""
 
 
 class PluginManager:

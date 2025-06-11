@@ -1,7 +1,14 @@
 
-device_id: 0  # Try different camera indices
-fps: 30       # Adjust based on camera capability
-run_time: 30  # Run for 30 seconds
+case_config:
+  device_id: 0  # Try different camera indices
+  rex_x: 1280   # x reslution
+  res_y: 720    # y resolution
+  fps: 30       # analysis frame pre-second
+  run_time: 20  # Run for 20 seconds
+tests:
+  timeout: 30   # second wait for prompt string
+  prompt: "screen starts" # prompt to show the test start
+  expect: ["sample.display.shield"]
 plugins:
   - name: black_screen
     module: plugins.black_screen_detector
@@ -45,7 +52,7 @@ plugins:
       metadata:
         name: "test.display.shield" # finger-print stored metadata
         platform: "frdm_mcxn947"
-      directory: "./fingerprints" # fingerprints direcory to compare with not used in generate mode
+      directory: "./fingerprints" # fingerprints directory to compare with not used in generate mode
       duration: 100 # number of frames to check
       method: "combined" #Signature method ('phash', 'dhash', 'histogram', 'combined')
       threshold: 0.65
