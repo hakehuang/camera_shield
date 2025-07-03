@@ -5,9 +5,11 @@
 
 import os
 import sys
+import argparse
 import io
 import importlib
 import argparse
+
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 import yaml
@@ -106,6 +108,9 @@ class Application:
                 if cv2.waitKey(1) == 27:  # ESC key
                     break
 
+                # Preprocess frame for each plugin
+                for name, plugin in self.active_plugins.items():
+                    plugin.preprocess_frame(frame)
                 results = {}
                 for name, plugin in self.active_plugins.items():
                     results[name] = plugin.process_frame(frame)

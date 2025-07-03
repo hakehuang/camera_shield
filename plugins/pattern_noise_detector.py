@@ -4,7 +4,7 @@
 import cv2
 import copy
 import numpy as np
-from uvc_core.plugin_base import DetectionPlugin
+from camera_shield.uvc_core.plugin_base import DetectionPlugin
 
 
 class PatternNoiseDetector(DetectionPlugin):

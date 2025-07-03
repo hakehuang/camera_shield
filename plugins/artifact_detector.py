@@ -5,7 +5,7 @@
 import cv2
 import copy
 import numpy as np
-from uvc_core.plugin_base import DetectionPlugin
+from camera_shield.uvc_core.plugin_base import DetectionPlugin
 
 
 class ArtifactDetector(DetectionPlugin):
@@ -26,7 +26,6 @@ class ArtifactDetector(DetectionPlugin):
 
     def initialize(self):
         """Initialize detection resources"""
-        # 可以在这里初始化任何需要的资源
         pass
 
     def _detect_black_screen(self, frame):

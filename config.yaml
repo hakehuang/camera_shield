@@ -46,7 +46,7 @@ plugins:
   - name: signature
     module: .plugins.signature_plugin
     class: VideoSignaturePlugin
-    status: "enable"
+    #status: "enable"
     config:
       operations: "compare" # operation ('generate', 'compare')
       metadata:
@@ -61,3 +61,20 @@ plugins:
       histogram_weight: 0.2
       edge_ratio_weight: 0.1
       gradient_hist_weight: 0.1
+
+  - name: brightness_block_mask
+    module: .plugins.brightness_block_mask
+    class: BrightnessBlockMaskPlugin
+    status: "enable"
+    config:
+      frame_processing_count: 20
+      block_target_name: "frdm_mcxn947"
+      directory: "./bbm"
+      mode: "generate"  # 'generate' or 'load'
+      block_size: 32
+      brightness_threshold_low: 50
+      brightness_threshold_high: 200
+      mask_mode: "binary"
+      blur_kernel_size: 5
+      enable_morphology: true
+      morph_kernel_size: 3

@@ -16,6 +16,13 @@ class DetectionPlugin(ABC):
     def initialize(self):
         """initialize"""
 
+    def preprocess_frame(self, frame) -> Dict[str, Any]:
+        """preprocess_frame
+        This method can be overridden by subclasses to preprocess the frame before processing.
+        use here to modify the frame, such as resizing, color conversion, etc.
+        """
+        pass
+
     @abstractmethod
     def process_frame(self, frame) -> Dict[str, Any]:
         """process_frame"""
