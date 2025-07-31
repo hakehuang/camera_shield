@@ -46,7 +46,7 @@ plugins:
   - name: signature
     module: .plugins.signature_plugin
     class: VideoSignaturePlugin
-    #status: "enable"
+    status: "enable"
     config:
       operations: "compare" # operation ('generate', 'compare')
       metadata:
@@ -65,7 +65,7 @@ plugins:
   - name: brightness_block_mask
     module: .plugins.brightness_block_mask
     class: BrightnessBlockMaskPlugin
-    status: "enable"
+    # status: "enable"
     config:
       frame_processing_count: 20
       block_target_name: "frdm_mcxn947"
