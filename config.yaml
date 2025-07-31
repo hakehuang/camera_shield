@@ -48,7 +48,7 @@ plugins:
     class: VideoSignaturePlugin
     status: "enable"
     config:
-      operations: "compare" # operation ('generate', 'compare')
+      operations: "generate" # operation ('generate', 'compare')
       metadata:
         name: "test.display.shield" # finger-print stored metadata
         platform: "frdm_mcxn947"
