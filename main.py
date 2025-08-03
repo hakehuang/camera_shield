@@ -64,7 +64,7 @@ class Application:
             self.case_config["res_x"] = self.config["case_config"].get("res_x", 1280)
             self.case_config["res_y"] = self.config["case_config"].get("res_y", 720)
             self.case_config["fps"] = self.config["case_config"].get("fps", 30)
-            self.case_config["run_time"] = self.config["case_config"].get("fps", 30)
+            self.case_config["run_time"] = self.config["case_config"].get("run_time", 30)
 
         self.camera = UVCCamera(self.case_config)
         self.plugin_manager = PluginManager()
