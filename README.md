@@ -20,6 +20,17 @@ python -m venv .ven
 
 # Install dependencies
 uv pip install -r requirements.txt  # or use pip install -r requirements.txt
+
+# add video to user group
+> sudo usermod -a -G video $USER
+need log out and login to effective or run
+> newgrp video
+```
+
+if you are in ubuntu with xwayland do below
+```
+ export DISPLAY=:0
+ cp /run/user/1000/.mutter-Xwaylandauth.AIT2A3 ~/.Xauthority
 ```
 
 ## Quick Start
