@@ -27,11 +27,16 @@ need log out and login to effective or run
 > newgrp video
 ```
 
-if you are in ubuntu with xwayland do below
-```
+if you are in ubuntu 2404 with xwayland do below
+```bash
  export DISPLAY=:0
  cp /run/user/1000/.mutter-Xwaylandauth.AIT2A3 ~/.Xauthority
 ```
+or
+```bash
+ export QT_QPA_PLATFORM=xcb
+```
+
 
 ## Quick Start
 ```python
