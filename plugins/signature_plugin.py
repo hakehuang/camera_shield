@@ -491,8 +491,10 @@ class VideoSignaturePlugin(DetectionPlugin):
         operations = self.config.get("operations", "compare")
         if result["frame_count"] == self.config.get("duration", 100):
             if operations == "compare":
+                print("compare operation")
                 matched = self.identify_video(self.config.get("threshold", 0.85))
             elif operations == "generate":
+                print("generate operation")
                 self.save_fingerprint(self.config.get("directory", "./fingerprint"))
             else:
                 print("not supported operation")
@@ -532,9 +534,12 @@ class VideoSignaturePlugin(DetectionPlugin):
 
     def shutdown(self) -> list:
         """Release plugin resources"""
-        if self.result:
-            print(f"{self.__class__.__name__} result: {self.result}\n")
+        if self.operations == "compare":
+            if self.result:
+                print(f"{self.__class__.__name__} result: {self.result}\n")
+            else:
+                print(f"{self.__class__.__name__} result: no match\n")
         else:
-            print(f"{self.__class__.__name__} result: no match\n")
+            print("generation done")
 
         return self.result
