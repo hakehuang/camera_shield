@@ -4,7 +4,7 @@ case_config:
   rex_x: 1280   # x reslution
   res_y: 720    # y resolution
   fps: 30       # analysis frame pre-second
-  run_time: 20  # Run for 20 seconds
+  run_time: 30  # Run for 20 seconds
 tests:
   timeout: 30   # second wait for prompt string
   prompt: "screen starts" # prompt to show the test start
