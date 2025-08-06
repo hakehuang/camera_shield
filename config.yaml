@@ -8,7 +8,7 @@ case_config:
 tests:
   timeout: 30   # second wait for prompt string
   prompt: "screen starts" # prompt to show the test start
-  expect: ["sample.display.shield"]
+  expect: ["tests.drivers.display.check.shield"]
 plugins:
   - name: black_screen
     module: .plugins.black_screen_detector
@@ -50,7 +50,7 @@ plugins:
     config:
       operations: "generate" # operation ('generate', 'compare')
       metadata:
-        name: "test.display.shield" # finger-print stored metadata
+        name: "tests.drivers.display.check.shield" # finger-print stored metadata
         platform: "frdm_mcxn947"
       directory: "./camera_shield/fingerprints" # fingerprints directory to compare with not used in generate mode
       duration: 100 # number of frames to check
