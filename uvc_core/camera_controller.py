@@ -12,6 +12,7 @@ class UVCCamera:
         self.device_id = config.get("device_id", 0)
         self.res_x = config.get("res_x", 1280)
         self.res_y = config.get("res_y", 720)
+        self.fps = config.get("fps", 30)
         self.cap = cv2.VideoCapture(self.device_id)
         self.prev_frame = None
         self.current_alarms = 0
@@ -24,7 +25,7 @@ class UVCCamera:
             raise Exception(f"Failed to open camera {self.device_id}")
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.res_x)  # Set resolution
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.res_y)
-        self.cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
+        self.cap.set(cv2.CAP_PROP_FPS, self.fps)
         # Read initial 10 frames to stabilize camera
         for _ in range(10):
             self.get_frame()
