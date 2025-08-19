@@ -37,6 +37,12 @@ or
  export QT_QPA_PLATFORM=xcb
 ```
 
+if you server does not have display please do below
+```bash
+> pip uninstall opencv-python
+> pip install opencv-python-headless
+> export QT_QPA_PLATFORM=offscreen
+```
 
 ## Quick Start
 ```python
